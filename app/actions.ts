@@ -42,8 +42,21 @@ export type AIResponse = {
 
 export async function explainError(errorMessage: string) {
   const AI_API_KEY = process.env.AI_API_KEY;
+  
+  // デバッグ用ログ（サーバーサイドのコンソールに出力されます）
+  console.log("--- Debug: Environment Variable Check ---");
+  console.log("AI_API_KEY exists:", !!AI_API_KEY);
+  if (AI_API_KEY) {
+    console.log("AI_API_KEY prefix:", AI_API_KEY.substring(0, 8));
+  }
+  
   if (!AI_API_KEY) {
-    throw new Error("AI_API_KEY is not defined");
+    // 画面に詳細な理由を表示するためのエラー投げ
+    throw new Error("SERVER_ERROR: AI_API_KEY is undefined. Please check Amplify Console Environment Variables and re-deploy.");
+  }
+
+  if (!AI_API_KEY.startsWith('http')) {
+    throw new Error(`SERVER_ERROR: AI_API_KEY must be a URL starting with http/https. Current prefix: ${AI_API_KEY.substring(0, 5)}...`);
   }
 
   const endpoint = `${AI_API_KEY}/free`;
