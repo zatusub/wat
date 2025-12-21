@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "wat!?",
   description: "エラーから原因を特定するプログラミング学習ツールです",
+  icons: {
+    icon: "/topimage.png",
+  },
   openGraph: {
     title: "wat!?",
     description: "エラーから原因を特定するプログラミング学習ツールです",
