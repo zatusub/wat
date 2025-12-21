@@ -6,6 +6,8 @@ frontend:
         - npm ci
     build:
       commands:
+        # ビルド前に環境変数を .env.production に書き出す（重要！）
+        - echo "AI_API_KEY=$AI_API_KEY" >> .env.production
         - npm run build
   artifacts:
     baseDirectory: .next
