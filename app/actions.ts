@@ -1,6 +1,5 @@
 "use server";
 
-const AI_API_KEY = process.env.AI_API_KEY;
 const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent"; 
 
 // Note: user instructions said: 
@@ -42,6 +41,7 @@ export type AIResponse = {
 };
 
 export async function explainError(errorMessage: string) {
+  const AI_API_KEY = process.env.AI_API_KEY;
   if (!AI_API_KEY) {
     throw new Error("AI_API_KEY is not defined");
   }
