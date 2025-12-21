@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "wat!?",
   description: "エラーから原因を特定するプログラミング学習ツールです",
+  verification: {
+    google: "Ofa0C5PcwYpoorFA5uh_QcP1YWGLyX3m-BeBY2TjEvE",
+  },
   icons: {
     icon: "/topimage.png",
   },
