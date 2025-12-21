@@ -57,12 +57,20 @@ export default function Home() {
     setStatus("loading");
     setErrorMessage("");
     try {
-      const data = await explainError(errorInput);
-      setResult(data);
+      const result = await explainError(errorInput);
+
+      if (result && "error" in result) {
+        console.error("Server Error:", result);
+        setErrorMessage(`エラーが発生しました: ${result.error} (${result.details || ''})`);
+        setStatus("error");
+        return;
+      }
+
+      setResult(result as AIResponse);
       setStatus("success");
     } catch (error) {
       console.error(error);
-      setErrorMessage("解説の取得に失敗しました。時間をおいて再度お試しください。");
+      setErrorMessage("通信に失敗しました。");
       setStatus("error");
     }
   };

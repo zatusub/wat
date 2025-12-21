@@ -40,28 +40,26 @@ export type AIResponse = {
   }[];
 };
 
-export async function explainError(errorMessage: string) {
-  const AI_API_KEY = process.env.AI_API_KEY;
-  
-  // デバッグ用ログ（サーバーサイドのコンソールに出力されます）
-  console.log("--- Debug: Environment Variable Check ---");
-  console.log("AI_API_KEY exists:", !!AI_API_KEY);
-  if (AI_API_KEY) {
-    console.log("AI_API_KEY prefix:", AI_API_KEY.substring(0, 8));
-  }
-  
-  if (!AI_API_KEY) {
-    // 画面に詳細な理由を表示するためのエラー投げ
-    throw new Error("SERVER_ERROR: AI_API_KEY is undefined. Please check Amplify Console Environment Variables and re-deploy.");
-  }
+export type ExplainResult = AIResponse | { error: string; details?: string };
 
-  if (!AI_API_KEY.startsWith('http')) {
-    throw new Error(`SERVER_ERROR: AI_API_KEY must be a URL starting with http/https. Current prefix: ${AI_API_KEY.substring(0, 5)}...`);
-  }
-
-  const endpoint = `${AI_API_KEY}/free`;
-
+export async function explainError(errorMessage: string): Promise<ExplainResult> {
   try {
+    const AI_API_KEY = process.env.AI_API_KEY;
+    
+    // デバッグ用ログ（サーバーサイドのコンソールに出力されます）
+    console.log("--- Debug: Environment Variable Check ---");
+    console.log("AI_API_KEY exists:", !!AI_API_KEY);
+    
+    if (!AI_API_KEY) {
+      return { error: "ENV_MISSING", details: "AI_API_KEY is undefined on Amplify server." };
+    }
+
+    if (!AI_API_KEY.startsWith('http')) {
+      return { error: "INVALID_URL", details: `URL prefix: ${AI_API_KEY.substring(0, 5)}` };
+    }
+
+    const endpoint = `${AI_API_KEY}/free`;
+
     const response = await fetch(endpoint, {
       method: "POST",
       headers: {
@@ -73,26 +71,23 @@ export async function explainError(errorMessage: string) {
     if (!response.ok) {
       const text = await response.text();
       console.error("AI API Error:", response.status, text);
-      throw new Error(`AI API request failed: ${response.status}`);
+      return { error: "API_ERROR", details: `Status: ${response.status}` };
     }
 
-    const data = await response.text(); // The user said "AIが返してくる" in the format.
-    // The user example shows markdown code block with JSON.
-
-    // Regex to extract JSON object
+    const data = await response.text();
     const jsonMatch = data.match(/```json\s*(\{[\s\S]*?\})\s*```/) || data.match(/(\{[\s\S]*\})/);
     
     if (!jsonMatch) {
       console.error("Failed to parse AI response (Regex mismatch):", data);
-      throw new Error("Failed to parse AI response");
+      return { error: "PARSE_ERROR", details: data.substring(0, 100) };
     }
 
     const jsonString = jsonMatch[1];
     const parsedData = JSON.parse(jsonString) as AIResponse;
     return parsedData;
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("explainError failed:", error);
-    throw error;
+    return { error: "RUNTIME_ERROR", details: error.message };
   }
 }
