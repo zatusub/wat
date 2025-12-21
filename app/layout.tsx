@@ -15,6 +15,15 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "wat!?",
   description: "エラーから原因を特定するプログラミング学習ツールです",
+  openGraph: {
+    title: "wat!?",
+    description: "エラーから原因を特定するプログラミング学習ツールです",
+    images: ["/topimage.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/topimage.png"],
+  },
 };
 
 export default function RootLayout({
