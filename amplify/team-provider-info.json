@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-wat-dev-8f913-authRole",
+      "UnauthRoleArn": "arn:aws:iam::431343616414:role/amplify-wat-dev-8f913-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::431343616414:role/amplify-wat-dev-8f913-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-wat-dev-8f913-deployment",
+      "UnauthRoleName": "amplify-wat-dev-8f913-unauthRole",
+      "StackName": "amplify-wat-dev-8f913",
+      "StackId": "arn:aws:cloudformation:us-east-1:431343616414:stack/amplify-wat-dev-8f913/5a2f0d70-df31-11f0-b282-0e25d299d9a9",
+      "AmplifyAppId": "d3kfh9mauu511x"
+    },
+    "categories": {
+      "auth": {
+        "watb882ce35": {}
+      }
+    }
+  }
+}

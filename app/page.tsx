@@ -6,6 +6,12 @@ import logo from "./WAT.png";
 import logoDark from "./WAT-d.png";
 import { explainError, AIResponse } from "./actions";
 import ResultView from "./components/ResultView";
+import { Authenticator } from '@aws-amplify/ui-react';
+import '@aws-amplify/ui-react/styles.css';
+import { useAIModel } from "./hooks/useAIModel";
+
+import { useAuthenticator } from '@aws-amplify/ui-react';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const [theme, setTheme] = useState<"light" | "dark" | "system">("system");
@@ -14,6 +20,9 @@ export default function Home() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [result, setResult] = useState<AIResponse | null>(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const { getModel, getAuthToken } = useAIModel();
+  const { user, signOut, authStatus } = useAuthenticator();
+  const router = useRouter();
 
   // Handle Theme
   useEffect(() => {
@@ -57,7 +66,9 @@ export default function Home() {
     setStatus("loading");
     setErrorMessage("");
     try {
-      const result = await explainError(errorInput);
+      const model = getModel();
+      const token = await getAuthToken();
+      const result = await explainError(errorInput, model, token || undefined);
 
       if (result && "error" in result) {
         console.error("Server Error:", result);
@@ -104,7 +115,7 @@ export default function Home() {
           <nav className="flex items-center gap-4">
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-full hover:bg-surface transition-colors"
+              className="p-2 rounded-full hover:bg-surface transition-colors mr-2"
               aria-label="Toggle Theme"
             >
               {theme === "dark" ? (
@@ -125,12 +136,42 @@ export default function Home() {
                 </svg>
               )}
             </button>
-            <button className="text-sm font-medium hover:text-primary transition-colors">
-              ログイン
-            </button>
-            <button className="bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity">
-              登録
-            </button>
+
+            <div className="flex items-center gap-3">
+              {authStatus === 'authenticated' ? (
+                <>
+                  <span className="text-sm text-gray-500 font-medium hidden sm:inline">
+                    {user?.signInDetails?.loginId}
+                  </span>
+                  <button
+                    onClick={signOut}
+                    className="bg-surface text-foreground border border-border px-4 py-2 rounded-full text-sm font-medium hover:bg-border transition-colors group flex items-center gap-2"
+                  >
+                    <span>ログアウト</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-50 group-hover:opacity-100 transition-opacity">
+                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                      <polyline points="16 17 21 12 16 7" />
+                      <line x1="21" y1="12" x2="9" y2="12" />
+                    </svg>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => router.push('/login')}
+                    className="text-sm font-medium hover:text-primary transition-colors"
+                  >
+                    ログイン
+                  </button>
+                  <button
+                    onClick={() => router.push('/login')}
+                    className="bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-medium hover:opacity-90 transition-opacity"
+                  >
+                    登録
+                  </button>
+                </>
+              )}
+            </div>
           </nav>
         </div>
       </header>
@@ -146,8 +187,12 @@ export default function Home() {
                 wat!?
               </h1>
               <p className="text-lg md:text-xl text-gray-500 dark:text-gray-400 font-medium">
-                エラーメッセージを貼るだけで、<br className="md:hidden" />
-                何が起きてるか日本語で教えてくれる
+                {authStatus === 'authenticated'
+                  ? `こんにちは、${user?.signInDetails?.loginId?.split('@')[0]}さん！`
+                  : 'エンジニアのための、直感的なエラー解説ツール。'
+                }
+                <br />
+                エラーメッセージを貼るだけで、何が起きてるか日本語で教えてくれる
               </p>
             </div>
 

@@ -62,3 +62,47 @@ body {
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+/* Amplify UI Overrides */
+[data-amplify-authenticator] {
+  --amplify-colors-brand-primary-10: var(--primary);
+  --amplify-colors-brand-primary-80: var(--primary);
+  --amplify-colors-brand-primary-90: var(--primary);
+  --amplify-colors-brand-primary-100: var(--primary);
+  --amplify-colors-background-primary: var(--background);
+  --amplify-colors-background-secondary: var(--surface);
+  --amplify-colors-border-primary: var(--border);
+  --amplify-colors-text-primary: var(--foreground);
+  --amplify-colors-text-secondary: var(--foreground);
+  --amplify-colors-text-tertiary: var(--foreground);
+  
+  --amplify-components-button-primary-background-color: var(--primary);
+  --amplify-components-button-primary-hover-background-color: var(--primary);
+  --amplify-components-fieldcontrol-focus-border-color: var(--primary);
+  --amplify-components-tabs-item-active-border-color: var(--primary);
+  --amplify-components-tabs-item-active-color: var(--primary);
+  --amplify-radii-medium: 1rem;
+  --amplify-radii-large: 1.5rem;
+}
+
+.amplify-button[data-variation='primary'] {
+  background: var(--primary);
+  border-radius: 9999px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.amplify-button[data-variation='primary']:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.2);
+}
+
+.amplify-tabs {
+  border-bottom: 1px solid var(--border);
+}
+
+.amplify-card {
+  border-radius: 1.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border);
+}

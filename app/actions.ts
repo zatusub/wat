@@ -42,13 +42,15 @@ export type AIResponse = {
 
 export type ExplainResult = AIResponse | { error: string; details?: string };
 
-export async function explainError(errorMessage: string): Promise<ExplainResult> {
+export async function explainError(errorMessage: string, model: string, token?: string): Promise<ExplainResult> {
   try {
     const AI_API_KEY = process.env.AI_API_KEY;
     
     // デバッグ用ログ（サーバーサイドのコンソールに出力されます）
     console.log("--- Debug: Environment Variable Check ---");
     console.log("AI_API_KEY exists:", !!AI_API_KEY);
+    console.log("Model:", model);
+    console.log("Token present:", !!token);
     
     if (!AI_API_KEY) {
       return { error: "ENV_MISSING", details: "AI_API_KEY is undefined on Amplify server." };
@@ -64,8 +66,12 @@ export async function explainError(errorMessage: string): Promise<ExplainResult>
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        ...(token ? { "Authorization": `Bearer ${token}` } : {}),
       },
-      body: JSON.stringify({ content: errorMessage }),
+      body: JSON.stringify({ 
+        content: errorMessage,
+        model: model 
+      }),
     });
 
     if (!response.ok) {
