@@ -14,46 +14,50 @@
 }
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --primary: #4f46e5; /* Indigo 600 */
+  /* Green Mode (Light) */
+  --background: #f0fdf4; /* emerald-50 */
+  --foreground: #14532d; /* emerald-900 */
+  --primary: #10b981; /* emerald-500 */
   --primary-foreground: #ffffff;
-  --surface: #f3f4f6; /* Gray 100 */
-  --surface-foreground: #111827;
-  --border: #e5e7eb;
+  --surface: #d1fae5; /* emerald-100 */
+  --surface-foreground: #064e3b; /* emerald-900 */
+  --border: #6ee7b7; /* emerald-300 */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-    --primary: #6366f1; /* Indigo 500 */
+    /* Tropical Mode (Dark - GitHub Dimmed inspired) */
+    --background: #0d1117; /* GitHub Dimmed BG */
+    --foreground: #c9d1d9; /* GitHub Dimmed Text */
+    --primary: #f472b6; /* Pink accent (Tropical) */
     --primary-foreground: #ffffff;
-    --surface: #171717; /* Neutral 900 */
-    --surface-foreground: #f3f4f6;
-    --border: #262626;
+    --surface: #161b22; /* GitHub Dimmed Surface */
+    --surface-foreground: #f0f6fc;
+    --border: #30363d; /* GitHub Dimmed Border */
   }
 }
 
 /* Manual Overrides */
 :root.dark {
-  --background: #0a0a0a;
-  --foreground: #ededed;
-  --primary: #6366f1;
+  /* Tropical Mode (Dark) */
+  --background: #0d1117;
+  --foreground: #c9d1d9;
+  --primary: #f472b6; /* Pink 400 */
   --primary-foreground: #ffffff;
-  --surface: #171717;
-  --surface-foreground: #f3f4f6;
-  --border: #262626;
+  --surface: #161b22;
+  --surface-foreground: #f0f6fc;
+  --border: #30363d;
 }
 
 :root.light {
-  --background: #ffffff;
-  --foreground: #171717;
-  --primary: #4f46e5;
+  /* Green Mode (Light) */
+  --background: #f0fdf4;
+  --foreground: #14532d;
+  --primary: #10b981;
   --primary-foreground: #ffffff;
-  --surface: #f3f4f6;
-  --surface-foreground: #111827;
-  --border: #e5e7eb;
+  --surface: #ffffff;
+  --surface-foreground: #064e3b;
+  --border: #6ee7b7;
 }
 
 body {
